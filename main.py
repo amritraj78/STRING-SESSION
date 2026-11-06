@@ -57,6 +57,10 @@ from pyrogram.errors import ApiIdInvalid, ApiIdPublishedFlood, AccessTokenInvali
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
+# Suppress noisy background MTProto pings and connection debugs
+logging.getLogger("pyrogram.session.session").setLevel(logging.WARNING)
+logging.getLogger("pyrogram.connection.connection").setLevel(logging.WARNING)
+logging.getLogger("telethon").setLevel(logging.WARNING)
 
 
 # Koyeb / Cloud HTTP Health Check Server
@@ -95,6 +99,8 @@ app = Client(
     api_hash=config.API_HASH,
     bot_token=config.BOT_TOKEN,
     in_memory=True,
+    workers=min(32, (os.cpu_count() or 1) + 4),
+    sleep_threshold=60,
     plugins=dict(root="StringGenBot"),
 )
 
