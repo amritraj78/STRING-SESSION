@@ -14,14 +14,42 @@ except RuntimeError:
 
 import config
 
-# Initialize kurimod (or pyromod) monkeypatches
 try:
     import kurimod  # type: ignore # noqa: F401
+    import kurimod.types.identifier as _k_ident
+    if hasattr(_k_ident, "Identifier"):
+        def _safe_matches(self, update):
+            ann = getattr(self, "__annotations__", None) or getattr(self.__class__, "__annotations__", {})
+            for field in ann:
+                pattern_value = getattr(self, field, None)
+                update_value = getattr(update, field, None)
+                if pattern_value is not None:
+                    if isinstance(update_value, list):
+                        if isinstance(pattern_value, list):
+                            if not set(update_value).intersection(set(pattern_value)):
+                                return False
+                        elif pattern_value not in update_value:
+                            return False
+                    elif isinstance(pattern_value, list):
+                        if update_value not in pattern_value:
+                            return False
+                    elif update_value != pattern_value:
+                        return False
+            return True
+
+        def _safe_count(self):
+            ann = getattr(self, "__annotations__", None) or getattr(self.__class__, "__annotations__", {})
+            return sum(1 for attr in ann if getattr(self, attr, None) is not None)
+
+        _k_ident.Identifier.matches = _safe_matches
+        _k_ident.Identifier.count_populated = _safe_count
 except ImportError:
     try:
         from pyromod import listen  # type: ignore # noqa: F401
     except ImportError:
         pass
+except Exception:
+    pass
 
 from pyrogram import Client, idle
 from pyrogram.errors import ApiIdInvalid, ApiIdPublishedFlood, AccessTokenInvalid
