@@ -1,15 +1,19 @@
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 
-from config import OWNER_ID
+from config import OWNER_ID, SUPPORT_CHAT, CHANNEL
 
 
 def filter(cmd: str):
     return filters.private & filters.incoming & filters.command(cmd)
 
+
 @Client.on_message(filter("start"))
 async def start(bot: Client, msg: Message):
     me2 = bot.me.mention if getattr(bot, "me", None) else (await bot.get_me()).mention
+    support_url = SUPPORT_CHAT if SUPPORT_CHAT.startswith("http") else f"https://t.me/{SUPPORT_CHAT.lstrip('@')}"
+    channel_url = CHANNEL if CHANNEL.startswith("http") else f"https://t.me/{CHANNEL.lstrip('@')}"
+
     await bot.send_message(
         chat_id=msg.chat.id,
         text=f"""𝐇𝐞𝐲 {msg.from_user.mention}🍷,
@@ -26,9 +30,9 @@ async def start(bot: Client, msg: Message):
                     InlineKeyboardButton(text="⚡𝐆𝐄𝐍𝐄𝐑𝐀𝐓𝐄 𝐒𝐓𝐑𝐈𝐍𝐆⚡", callback_data="generate")
                 ],
                 [
-                    InlineKeyboardButton("❣️ 𝐒𝐮𝐩𝐩𝐨𝐫𝐭 ❣️", url="https://t.me/ll_KINGDOM_ll"),
-                    InlineKeyboardButton("🥀 𝐎𝐟𝐟𝐢𝐜𝐞 🥀", url="https://t.me/ll_IMPERIAL_ll")
-                ]
+                    InlineKeyboardButton("❣️ 𝐒𝐮𝐩𝐩𝐨𝐫𝐭 ❣️", url=support_url),
+                    InlineKeyboardButton("🥀 𝐎𝐟𝐟𝐢𝐜𝐞 🥀", url=channel_url),
+                ],
             ]
         ),
         disable_web_page_preview=True,

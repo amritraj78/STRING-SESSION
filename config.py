@@ -21,5 +21,7 @@ BOT_TOKEN = getenv("BOT_TOKEN", "")
 OWNER_ID = get_int("OWNER_ID")
 
 MONGO_DB_URI = getenv("MONGO_DB_URI") or getenv("MONGO_URL") or None
-MUST_JOIN = getenv("MUST_JOIN", None)
+MUST_JOIN = getenv("MUST_JOIN", "amrit_feel privatethink")
+SUPPORT_CHAT = getenv("SUPPORT_CHAT", "amrit_feel")
+CHANNEL = getenv("CHANNEL", "privatethink")
 PORT = get_int("PORT", 8000)
