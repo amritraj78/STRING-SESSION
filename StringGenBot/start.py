@@ -9,7 +9,7 @@ def filter(cmd: str):
 
 @Client.on_message(filter("start"))
 async def start(bot: Client, msg: Message):
-    me2 = (await bot.get_me()).mention
+    me2 = bot.me.mention if getattr(bot, "me", None) else (await bot.get_me()).mention
     await bot.send_message(
         chat_id=msg.chat.id,
         text=f"""𝐇𝐞𝐲 {msg.from_user.mention}🍷,

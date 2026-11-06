@@ -172,14 +172,9 @@ async def shellrunner(client, message):
             )
         except Exception as err:
             print(err)
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            errors = traceback.format_exception(
-                etype=exc_type,
-                value=exc_obj,
-                tb=exc_tb,
-            )
+            errors = traceback.format_exc()
             return await edit_or_reply(
-                message, text=f"**ERROR:**\n```{''.join(errors)}```"
+                message, text=f"**ERROR:**\n```{errors}```"
             )
         output = process.stdout.read()[:-1].decode("utf-8")
     if str(output) == "\n":

@@ -6,37 +6,39 @@
     "telegram",
     "bot",
     "python",
-    "pyrogram"
+    "pyrogram",
+    "telethon",
+    "koyeb"
   ],
-    "env": {
-        "BOT_TOKEN": {
-            "description": "Get this value from @BotFather",
-            "required": true
-        },  
-        "MUST_JOIN": {
-            "description": "Username of a group or channel for which you want to set force sub.(without @)",
-            "required": true      
-        }, 
-        "MONGO_URL": {
-            "description": "mongo db url here",
-            "required": true
-        },
-        "API_ID": {
-            "description": "telegram api id here",
-            "required": true
-        },
-        "OWNER_ID": {
-            "description": "Telegram id of the person who will known as owner of the bot.",
-            "required": true
-        }, 
-        "API_HASH": {
-            "description": "telegram api hash here",
-            "required": true
-        }
+  "env": {
+    "BOT_TOKEN": {
+      "description": "Get this value from @BotFather",
+      "required": true
     },
-    "addons": [
-        {
-            "plan": "heroku-postgresql"
-        }
-    ]
+    "API_ID": {
+      "description": "Telegram API ID from my.telegram.org",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "Telegram API HASH from my.telegram.org",
+      "required": true
+    },
+    "OWNER_ID": {
+      "description": "Telegram user ID of the owner of the bot",
+      "required": true
+    },
+    "MONGO_DB_URI": {
+      "description": "MongoDB connection URI (e.g. from mongodb.com Atlas)",
+      "required": false
+    },
+    "MUST_JOIN": {
+      "description": "Username or invite link of channel/group for force sub (optional)",
+      "required": false
+    },
+    "PORT": {
+      "description": "Port for HTTP health checks (default 8000 for Koyeb)",
+      "value": "8000",
+      "required": false
+    }
+  }
 }
