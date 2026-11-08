@@ -1,7 +1,26 @@
+import time
 from os import getenv
 from dotenv import load_dotenv
 
 load_dotenv()
+
+START_TIME = time.time()
+
+
+def get_readable_time(seconds: int) -> str:
+    count = int(seconds)
+    days, count = divmod(count, 86400)
+    hours, count = divmod(count, 3600)
+    minutes, seconds = divmod(count, 60)
+    parts = []
+    if days > 0:
+        parts.append(f"{days}d")
+    if hours > 0:
+        parts.append(f"{hours}h")
+    if minutes > 0:
+        parts.append(f"{minutes}m")
+    parts.append(f"{seconds}s")
+    return " ".join(parts)
 
 
 def get_int(key: str, default: int = 0) -> int:

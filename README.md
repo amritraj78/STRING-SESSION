@@ -4,12 +4,16 @@
 
 ### 🤤 Features
 
-- [»] Supports **Pyrogram v2** & **Pyrogram v1**
-- [»] Supports **Telethon**
-- [»] Supports String Session generation for **BotFather Bots**
-- [»] Fully configured for **Koyeb** (built-in HTTP health check server on `$PORT`)
-- [»] Dockerfile ready for Docker & Cloud deployments
-- [»] Safe & secure session generation
+- [»] **Pyrogram v2, Pyrogram v1 & Telethon** string session generator
+- [»] **BotFather Bots Session** generation support
+- [»] **Session String Validator & Checker (`/check`)** - safely verifies active/revoked sessions in-memory
+- [»] **Broadcast System (`/broadcast`)** - broadcast text & media to all bot users with `-copy` & `-pin` options
+- [»] **Ping & Uptime Monitor (`/ping`, `/uptime`, `/alive`)** - live latency, RAM usage & uptime stats
+- [»] **Admin User Moderation (`/ban`, `/unban`, `/banned`)** - complete control over malicious users
+- [»] **System Dashboard (`/stats`)** - real-time served users and resource analytics
+- [»] **24/7 Koyeb Keep-Alive Auto-Pinger** - prevents free-tier deep sleep
+- [»] **Interactive Menus (`/help`, `/about`)** with smooth inline navigation
+- [»] Pure in-memory session operations - **100% safe & private**
 
 ---
 

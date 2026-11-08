@@ -1,5 +1,6 @@
 import time
-from config import MUST_JOIN
+from config import MUST_JOIN, OWNER_ID
+from StringGenBot.db.banned import is_banned_user
 
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
@@ -26,12 +27,19 @@ def set_user_verified(user_id: int):
 
 @Client.on_message(filters.incoming & filters.private, group=-1)
 async def must_join_channel(bot: Client, msg: Message):
-    if not MUST_JOIN:
-        return
     if not msg.from_user:
         return
 
     user_id = msg.from_user.id
+
+    # Check if user is banned
+    if user_id != OWNER_ID and await is_banned_user(user_id):
+        await msg.reply_text("🚫 **ʏᴏᴜ ᴀʀᴇ ʙᴀɴɴᴇᴅ ғʀᴏᴍ ᴜsɪɴɢ ᴛʜɪs ʙᴏᴛ!**\n\nᴄᴏɴᴛᴀᴄᴛ sᴜᴩᴩᴏʀᴛ ɪғ ʏᴏᴜ ᴛʜɪɴᴋ ᴛʜɪs ɪs ᴀ ᴍɪsᴛᴀᴋᴇ.")
+        await msg.stop_propagation()
+        return
+
+    if not MUST_JOIN:
+        return
 
     # Fast-path: bypass API calls if user was recently verified
     if is_user_verified(user_id):
