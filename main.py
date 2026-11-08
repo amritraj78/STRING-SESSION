@@ -3,6 +3,7 @@ import time
 import logging
 import threading
 import asyncio
+import urllib.request
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # Ensure asyncio event loop exists on Python 3.12+ before importing pyrogram
@@ -92,6 +93,32 @@ def start_health_check_server():
         logging.warning(f"Could not bind health check server on port {port}: {e}")
 
 
+def start_keep_alive():
+    app_url = os.environ.get("KOYEB_APP_URL") or "https://string-session-animeworlds-bc879956.apps.mistral.run"
+    if not app_url:
+        return
+
+    def keep_alive_worker():
+        # Wait 60s for server and client to initialize
+        time.sleep(60)
+        while True:
+            try:
+                req = urllib.request.Request(
+                    app_url,
+                    headers={"User-Agent": "KoyebKeepAlive/1.0"}
+                )
+                with urllib.request.urlopen(req, timeout=15) as resp:
+                    pass
+                logging.info(f"Keep-alive ping sent to {app_url} (HTTP 200)")
+            except Exception as e:
+                logging.warning(f"Keep-alive ping to {app_url} warning: {e}")
+            time.sleep(300)  # Ping every 5 minutes to prevent Koyeb deep sleep
+
+    thread = threading.Thread(target=keep_alive_worker, daemon=True)
+    thread.start()
+    logging.info(f"Keep-alive worker started for {app_url} (interval: 300s).")
+
+
 StartTime = time.time()
 app = Client(
     "Anonymous",
@@ -107,6 +134,7 @@ app = Client(
 
 if __name__ == "__main__":
     start_health_check_server()
+    start_keep_alive()
     if not config.API_ID or not config.API_HASH or not config.BOT_TOKEN:
         print("\n❌ [ERROR] Missing Telegram Credentials!")
         print("Please configure your .env file or environment variables with:")
